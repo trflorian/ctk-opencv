@@ -6,6 +6,7 @@ from typing import Any
 import customtkinter
 import cv2
 import numpy as np
+import numpy.typing as npt
 from PIL import Image
 
 from ctk_opencv.processing.utils import convert_any_to_bgr
@@ -41,12 +42,12 @@ class CTkImageDisplay(customtkinter.CTkLabel):
         self.refresh_dt_ms = refresh_dt_ms
 
         self._frame = None
-        self.frame_queue = queue.Queue[np.ndarray](maxsize=1)
+        self.frame_queue = queue.Queue[npt.NDArray](maxsize=1)
         self.bind("<Configure>", self._on_resize)
 
         self.after(self.refresh_dt_ms, self._on_refresh)
 
-    def calculate_target_size(self, frame: np.ndarray) -> tuple[int, int]:
+    def calculate_target_size(self, frame: npt.NDArray) -> tuple[int, int]:
         """
         Calculate the target size for the image based on the display size and aspect ratio.
         """
@@ -64,7 +65,7 @@ class CTkImageDisplay(customtkinter.CTkLabel):
 
         return target_width, target_height
 
-    def _set_frame(self, frame: np.ndarray) -> None:
+    def _set_frame(self, frame: npt.NDArray) -> None:
         """
         Set the frame to be displayed in the widget.
         This method is called when a new frame is available.
@@ -127,7 +128,7 @@ class CTkImageDisplay(customtkinter.CTkLabel):
         if self._image is not None and self._frame is not None:
             self._set_frame(self._frame)
 
-    def update_frame(self, frame: np.ndarray) -> None:
+    def update_frame(self, frame: npt.NDArray) -> None:
         """
         Updates the displayed image with a new frame using CTkImage.
 

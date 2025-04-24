@@ -1,13 +1,14 @@
 import cv2
 import numpy as np
+import numpy.typing as npt
 
 
-def convert_any_to_bgr(frame: np.ndarray) -> np.ndarray:
+def convert_any_to_bgr(frame: npt.NDArray) -> npt.NDArray[np.uint8]:
     """
     Convert any image format to BGR format.
 
     Args:
-        frame: The input image frame.
+        frame: The input image frame. Can be float or grayscale.
 
     Returns:
         The converted image in BGR format.

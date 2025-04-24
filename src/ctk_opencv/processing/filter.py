@@ -16,10 +16,10 @@ class Filter(Protocol):
         Apply the filter to the given frame.
 
         Args:
-            frame (np.ndarray): The input image frame.
+            frame (npt.NDArray): The input image frame.
 
         Returns:
-            np.ndarray: The filtered image frame.
+            npt.NDArray: The filtered image frame.
         """
         raise NotImplementedError()
 

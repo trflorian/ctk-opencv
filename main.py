@@ -7,9 +7,6 @@ from ctk_opencv.processing.filter import FilterFactory
 
 
 def parse_args() -> argparse.Namespace:
-    """
-    Parse command line arguments.
-    """
     parser = argparse.ArgumentParser(description="Webcam Stream with Filters")
     parser.add_argument(
         "--gui",

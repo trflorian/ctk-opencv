@@ -1,10 +1,10 @@
 import cv2
 
-from .filter import Filter
-from .utils import convert_any_to_bgr
+from ctk_opencv.processing.filter import Filter
+from ctk_opencv.processing.utils import convert_any_to_bgr
 
 
-class AppOpenCV:
+class App:
     def __init__(self, filters: list[Filter]) -> None:
         self.filters = filters
 

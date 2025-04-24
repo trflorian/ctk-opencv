@@ -1,9 +1,9 @@
 import argparse
 import logging
 
-from ctk_opencv.app_ctk import AppCtk
-from ctk_opencv.app_opencv import AppOpenCV
-from ctk_opencv.filter import FilterFactory
+from ctk_opencv.ctk.app import App as AppCtk
+from ctk_opencv.opencv.app import App as AppOpenCV
+from ctk_opencv.processing.filter import FilterFactory
 
 
 def parse_args() -> argparse.Namespace:

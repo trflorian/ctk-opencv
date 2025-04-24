@@ -8,7 +8,7 @@ import cv2
 import numpy as np
 from PIL import Image
 
-from .utils import convert_any_to_bgr
+from ctk_opencv.processing.utils import convert_any_to_bgr
 
 
 class CTkImageDisplay(customtkinter.CTkLabel):
@@ -30,7 +30,7 @@ class CTkImageDisplay(customtkinter.CTkLabel):
             textvariable=self._textvariable,
             image=None,
         )
-        
+
         self.logger = logging.getLogger(__name__)
 
         self.display_size = display_size

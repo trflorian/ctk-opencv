@@ -3,7 +3,7 @@
 ![demo](https://github.com/user-attachments/assets/c8600663-3b1d-489d-a144-56179f811cc3)
 
 This demo showcases a CTK component that can display opencv frames from a video or a webcam stream.
-The implementation uses a thread-safe queue to syncrhonize the frame buffer between the video thread and the main gui thread.
+The implementation uses a thread-safe queue to synchronize the frame buffer between the video thread and the main gui thread.
 
 ## Comparison
 

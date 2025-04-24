@@ -122,4 +122,12 @@ class CTkImageDisplay(customtkinter.CTkLabel):
         Args:
             frame: The new frame to display, in BGR format.
         """
+        if frame.dtype != np.uint8:
+            # scale the frame to uint8 if necessary
+            frame = cv2.normalize(frame, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
+
+        if len(frame.shape) == 2:
+            # If the frame is grayscale, convert it to BGR
+            frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
+
         self.frame_queue.put(frame)

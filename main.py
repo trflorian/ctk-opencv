@@ -13,23 +13,17 @@ class App(customtkinter.CTk):
         self.title("Webcam Stream")
         self.geometry("800x600")
 
-        radio_var = customtkinter.StringVar(value="1")
+        self.radio_var = customtkinter.StringVar(value="1")
 
         # LAYOUT: left side radio button group, right side image display
         self.radio_frame = customtkinter.CTkFrame(self)
         self.radio_frame.pack(side="left", fill="both", expand=True, padx=10, pady=10)
-        self.radio_button_1 = customtkinter.CTkRadioButton(
-            self.radio_frame, text="Option 1", variable=radio_var, value=1
-        )
-        self.radio_button_1.pack(padx=10, pady=10)
-        self.radio_button_2 = customtkinter.CTkRadioButton(
-            self.radio_frame, text="Option 2", variable=radio_var, value=2
-        )
-        self.radio_button_2.pack(padx=10, pady=10)
-        self.radio_button_3 = customtkinter.CTkRadioButton(
-            self.radio_frame, text="Option 3", variable=radio_var, value=3
-        )
-        self.radio_button_3.pack(padx=10, pady=10)
+
+        for option in ["Normal", "Grayscale", "Blur", "Canny", "Sobel", "Laplacian"]:
+            radio_button = customtkinter.CTkRadioButton(
+                self.radio_frame, text=option, variable=self.radio_var, value=option
+            )
+            radio_button.pack(padx=10, pady=10)
 
         # LAYOUT: right side image display
         self.image_frame = customtkinter.CTkFrame(self)
@@ -48,13 +42,28 @@ class App(customtkinter.CTk):
         """
         Start the webcam stream and update the image display.
         """
-
         cap = cv2.VideoCapture(0)
 
         while True:
             ret, frame = cap.read()
             if not ret:
                 break
+
+            # Apply the selected filter
+            filter_option = self.radio_var.get()
+
+            if filter_option == "Grayscale":
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            elif filter_option == "Blur":
+                frame = cv2.GaussianBlur(frame, (15, 15), 0)
+            elif filter_option == "Canny":
+                frame = cv2.Canny(frame, 100, 200)
+            elif filter_option == "Sobel":
+                frame = cv2.Sobel(frame, cv2.CV_64F, 1, 0, ksize=5)
+            elif filter_option == "Laplacian":
+                frame = cv2.Laplacian(frame, cv2.CV_64F)
+            elif filter_option == "Normal":
+                pass
 
             # Update the image display
             self.image_display.update_frame(frame)

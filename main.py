@@ -6,31 +6,31 @@ import customtkinter
 import numpy as np
 
 from ctk_image_display import CTkImageDisplay
-
+from filter import Filter, FilterFactory
 
 class App(customtkinter.CTk):
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, filters: list[Filter], *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+
+        self.filters = filters
 
         self.title("Webcam Stream")
         self.geometry("800x600")
 
-        self.radio_var = customtkinter.StringVar(value="1")
+        self.filter_var = customtkinter.IntVar(value=0)
 
-        # LAYOUT: left side radio button group, right side image display
-        self.radio_frame = customtkinter.CTkFrame(self)
-        self.radio_frame.pack(side="left", fill="both", expand=True, padx=10, pady=10)
+        self.filters_frame = customtkinter.CTkFrame(self)
+        self.filters_frame.pack(side="left", fill="both", expand=True, padx=10, pady=10)
 
-        for option in ["Normal", "Grayscale", "Blur", "Threshold", "Canny", "Sobel", "Laplacian"]:
-            radio_button = customtkinter.CTkRadioButton(
-                self.radio_frame, text=option, variable=self.radio_var, value=option
+        for filter_id, filter in enumerate(self.filters):
+            rb_filter = customtkinter.CTkRadioButton(
+                self.filters_frame, text=filter.name, variable=self.filter_var, value=filter_id,
             )
-            radio_button.pack(padx=10, pady=10)
+            rb_filter.pack(padx=10, pady=10)
 
-            if option == "Normal":
-                radio_button.select()
+            if filter_id == 0:
+                rb_filter.select()
 
-        # LAYOUT: right side image display
         self.image_frame = customtkinter.CTkFrame(self)
         self.image_frame.pack(side="right", fill="both", expand=True, padx=10, pady=10)
 
@@ -55,23 +55,9 @@ class App(customtkinter.CTk):
                 break
 
             # Apply the selected filter
-            filter_option = self.radio_var.get()
-
-            if filter_option == "Grayscale":
-                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            elif filter_option == "Blur":
-                frame = cv2.GaussianBlur(frame, (15, 15), 0)
-            elif filter_option == "Threshold":
-                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-                _, frame = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
-            elif filter_option == "Canny":
-                frame = cv2.Canny(frame, 100, 200)
-            elif filter_option == "Sobel":
-                frame = cv2.Sobel(frame, cv2.CV_64F, 1, 0, ksize=5)
-            elif filter_option == "Laplacian":
-                frame = cv2.Laplacian(frame, cv2.CV_64F)
-            elif filter_option == "Normal":
-                pass
+            filter_id = self.filter_var.get()
+            filter = self.filters[filter_id]
+            frame = filter.apply(frame)
 
             # Update the image display
             self.image_display.update_frame(frame)
@@ -79,12 +65,14 @@ class App(customtkinter.CTk):
         cap.release()
 
 class AppOpenCV:
-    def __init__(self) -> None:
+    def __init__(self, filters: list[Filter]) -> None:
+        self.filters = filters
+
         self.window_name = "Webcam Stream"
         cv2.namedWindow(self.window_name)
         
         self.tb_filter_name = "Filter"
-        cv2.createTrackbar(self.tb_filter_name, self.window_name, 0, 6, lambda x: None)
+        cv2.createTrackbar(self.tb_filter_name, self.window_name, 0, len(self.filters), lambda x: None)
         cv2.setTrackbarPos(self.tb_filter_name, self.window_name, 0)
 
     def start_webcam_stream(self) -> None:
@@ -99,34 +87,17 @@ class AppOpenCV:
                 break
 
             # Apply the selected filter
-            filter_option = cv2.getTrackbarPos(self.tb_filter_name, self.window_name)
+            filter_id = cv2.getTrackbarPos(self.tb_filter_name, self.window_name)
+            filter = self.filters[filter_id]
 
-            if filter_option == 1:
-                filter_name = "Grayscale"
-                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            elif filter_option == 2:
-                filter_name = "Blur"
-                frame = cv2.GaussianBlur(frame, (15, 15), 0)
-            elif filter_option == 3:
-                filter_name = "Threshold"
-                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-                _, frame = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
-            elif filter_option == 4:
-                filter_name = "Canny"
-                frame = cv2.Canny(frame, 100, 200)
-            elif filter_option == 5:
-                filter_name = "Sobel"
-                frame = cv2.Sobel(frame, cv2.CV_64F, 1, 0, ksize=5)
-            elif filter_option == 6:
-                filter_name = "Laplacian"
-                frame = cv2.Laplacian(frame, cv2.CV_64F)
-            elif filter_option == 0:
-                filter_name = "Normal"
+            # Get the filter name and apply the filter
+            filter_name = filter.name
+            frame = filter.apply(frame)
 
             # convert the frame to BGR format
             if frame.dtype != np.uint8:
                 # scale the frame to uint8 if necessary
-                frame = cv2.normalize(frame, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
+                cv2.normalize(frame, frame, 0, 255, cv2.NORM_MINMAX, dtype=cv2.CV_8U)
             if len(frame.shape) == 2:
                 # If the frame is grayscale, convert it to BGR
                 frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
@@ -174,11 +145,13 @@ def main() -> None:
 
     args = parse_args()
 
+    filters = FilterFactory.create_all_filters()
+
     if args.gui == "opencv":
-        app = AppOpenCV()
+        app = AppOpenCV(filters)
         app.start_webcam_stream()
     elif args.gui == "ctk":
-        app = App()
+        app = App(filters)
         app.mainloop()
 
 

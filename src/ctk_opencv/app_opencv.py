@@ -1,7 +1,7 @@
 import cv2
 
-from filter import Filter
-from utils import convert_any_to_bgr
+from .filter import Filter
+from .utils import convert_any_to_bgr
 
 
 class AppOpenCV:

@@ -3,12 +3,14 @@ import threading
 import customtkinter
 import cv2
 
-from ctk_image_display import CTkImageDisplay
-from filter import Filter
+from .ctk_image_display import CTkImageDisplay
+from .filter import Filter
 
 
 class AppCtk(customtkinter.CTk):
     def __init__(self, filters: list[Filter]) -> None:
+        super().__init__()
+
         self.filters = filters
 
         self.title("Webcam Stream")
@@ -38,7 +40,9 @@ class AppCtk(customtkinter.CTk):
         self.image_display = CTkImageDisplay(self.image_frame)
         self.image_display.pack(fill="both", expand=True, padx=10, pady=10)
 
-        self.webcam_stream_thread = threading.Thread(target=self.start_webcam_stream, daemon=True)
+        self.webcam_stream_thread = threading.Thread(
+            target=self.start_webcam_stream, daemon=True
+        )
         self.webcam_stream_thread.start()
 
     def start_webcam_stream(self) -> None:

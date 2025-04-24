@@ -8,7 +8,7 @@ import cv2
 import numpy as np
 from PIL import Image
 
-from utils import convert_any_to_bgr
+from .utils import convert_any_to_bgr
 
 
 class CTkImageDisplay(customtkinter.CTkLabel):

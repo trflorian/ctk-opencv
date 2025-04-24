@@ -1,5 +1,9 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
-name = "ctk-opencv"
+name = "ctk_opencv"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"

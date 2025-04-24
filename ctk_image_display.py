@@ -5,6 +5,8 @@ import tkinter as tk
 import cv2
 import numpy as np
 import queue
+from typing import Any
+from utils import convert_any_to_bgr
 
 class CTkImageDisplay(customtkinter.CTkLabel):
     """
@@ -13,7 +15,7 @@ class CTkImageDisplay(customtkinter.CTkLabel):
 
     def __init__(
         self,
-        master: any,
+        master: Any,
         display_size: tuple[int, int] | None = None,
         refresh_dt_ms: int = 1000 // 60,
         *args,
@@ -33,7 +35,10 @@ class CTkImageDisplay(customtkinter.CTkLabel):
         )
 
         self.display_size = display_size
-        self.widget_size = display_size
+        self.widget_size = (
+            self.winfo_width(),
+            self.winfo_height(),
+        )
         self.refresh_dt_ms = refresh_dt_ms
 
         self._frame = None
@@ -61,6 +66,14 @@ class CTkImageDisplay(customtkinter.CTkLabel):
         return target_width, target_height
 
     def _set_frame(self, frame: np.ndarray) -> None:
+        """
+        Set the frame to be displayed in the widget.
+        This method is called when a new frame is available.
+
+        Args:
+            frame: The new frame to display, in BGR format.
+        """
+
         self._frame = frame
 
         # Calculate the display size
@@ -122,13 +135,6 @@ class CTkImageDisplay(customtkinter.CTkLabel):
         Args:
             frame: The new frame to display, in BGR format.
         """
-        if frame.dtype != np.uint8:
-            # scale the frame to uint8 if necessary
-            cv2.normalize(frame, frame, 0, 255, cv2.NORM_MINMAX)
-            frame = frame.astype(np.uint8)
-
-        if len(frame.shape) == 2:
-            # If the frame is grayscale, convert it to BGR
-            frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
+        frame = convert_any_to_bgr(frame)
 
         self.frame_queue.put(frame)

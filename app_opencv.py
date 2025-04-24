@@ -1,7 +1,7 @@
 import cv2
-import numpy as np
 
 from filter import Filter
+from utils import convert_any_to_bgr
 
 class AppOpenCV:
     def __init__(self, filters: list[Filter]) -> None:
@@ -32,14 +32,8 @@ class AppOpenCV:
             filter_name = filter.name
             frame = filter.apply(frame)
 
-            # convert the frame to BGR format
-            if frame.dtype != np.uint8:
-                # scale the frame to uint8 if necessary
-                cv2.normalize(frame, frame, 0, 255, cv2.NORM_MINMAX)
-                frame = frame.astype(np.uint8)
-            if len(frame.shape) == 2:
-                # If the frame is grayscale, convert it to BGR
-                frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
+            # Convert the frame to BGR format if needed
+            frame = convert_any_to_bgr(frame)
             
             # add a black border at the bottom of the frame
             border_height = 50

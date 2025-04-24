@@ -1,10 +1,10 @@
 import argparse
 import logging
 
-from filter import FilterFactory
-
 from app_ctk import AppCtk
 from app_opencv import AppOpenCV
+from filter import FilterFactory
+
 
 def parse_args() -> argparse.Namespace:
     """
@@ -19,6 +19,7 @@ def parse_args() -> argparse.Namespace:
         help="Choose the GUI framework to use (ctk or opencv).",
     )
     return parser.parse_args()
+
 
 def main() -> None:
     logging.basicConfig(level=logging.INFO)

@@ -1,12 +1,15 @@
 import logging
-from PIL import Image
-import customtkinter
+import queue
 import tkinter as tk
+from typing import Any
+
+import customtkinter
 import cv2
 import numpy as np
-import queue
-from typing import Any
+from PIL import Image
+
 from utils import convert_any_to_bgr
+
 
 class CTkImageDisplay(customtkinter.CTkLabel):
     """
@@ -18,11 +21,7 @@ class CTkImageDisplay(customtkinter.CTkLabel):
         master: Any,
         display_size: tuple[int, int] | None = None,
         refresh_dt_ms: int = 1000 // 60,
-        *args,
-        **kwargs,
-    ):
-        self.logger = logging.getLogger(__name__)
-
+    ) -> None:
         self._textvariable = customtkinter.StringVar(master, "Loading...")
         super().__init__(
             master,
@@ -30,9 +29,9 @@ class CTkImageDisplay(customtkinter.CTkLabel):
             height=display_size[1] if display_size else 1024,
             textvariable=self._textvariable,
             image=None,
-            *args,
-            **kwargs,
         )
+        
+        self.logger = logging.getLogger(__name__)
 
         self.display_size = display_size
         self.widget_size = (

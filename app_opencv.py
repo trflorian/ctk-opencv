@@ -3,15 +3,22 @@ import cv2
 from filter import Filter
 from utils import convert_any_to_bgr
 
+
 class AppOpenCV:
     def __init__(self, filters: list[Filter]) -> None:
         self.filters = filters
 
         self.window_name = "Webcam Stream"
         cv2.namedWindow(self.window_name)
-        
+
         self.tb_filter_name = "Filter"
-        cv2.createTrackbar(self.tb_filter_name, self.window_name, 0, len(self.filters) - 1, lambda _: None)
+        cv2.createTrackbar(
+            self.tb_filter_name,
+            self.window_name,
+            0,
+            len(self.filters) - 1,
+            lambda _: None,
+        )
 
     def start_webcam_stream(self) -> None:
         """
@@ -34,12 +41,12 @@ class AppOpenCV:
 
             # Convert the frame to BGR format if needed
             frame = convert_any_to_bgr(frame)
-            
+
             # add a black border at the bottom of the frame
             border_height = 50
             border_color = (0, 0, 0)
             frame = cv2.copyMakeBorder(frame, 0, border_height, 0, 0, cv2.BORDER_CONSTANT, value=border_color)
-            
+
             # center the filter name
             cv2.putText(
                 frame,

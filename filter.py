@@ -1,7 +1,8 @@
 from typing import Protocol
 
-import numpy.typing as npt
 import cv2
+import numpy.typing as npt
+
 
 class Filter(Protocol):
     """
@@ -71,9 +72,7 @@ class ThresholdFilter(Filter):
 
     def apply(self, frame: npt.NDArray) -> npt.NDArray:
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        _, thresholded_frame = cv2.threshold(
-            gray, self.threshold, 255, cv2.THRESH_BINARY
-        )
+        _, thresholded_frame = cv2.threshold(gray, self.threshold, 255, cv2.THRESH_BINARY)
         return thresholded_frame
 
 
@@ -117,6 +116,7 @@ class LaplacianFilter(Filter):
 
     def apply(self, frame: npt.NDArray) -> npt.NDArray:
         return cv2.Laplacian(frame, cv2.CV_64F)
+
 
 class FilterFactory:
     """

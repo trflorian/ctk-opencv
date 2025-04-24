@@ -10,3 +10,8 @@ dependencies = [
     "opencv-python>=4.11.0.86",
     "pillow>=11.2.1",
 ]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.11.7",
+]

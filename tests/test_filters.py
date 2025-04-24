@@ -31,6 +31,4 @@ def test_normal_filter() -> None:
     filtered_image = normal_filter.apply(dummy_image)
 
     # Check that the filtered image is the same as the input image
-    assert np.array_equal(
-        filtered_image, dummy_image
-    ), "NormalFilter should return the input image unchanged"
+    assert np.array_equal(filtered_image, dummy_image), "NormalFilter should return the input image unchanged"

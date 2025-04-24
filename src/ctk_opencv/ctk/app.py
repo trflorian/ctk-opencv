@@ -19,7 +19,7 @@ class App(customtkinter.CTk):
         self.filter_var = customtkinter.IntVar(value=0)
 
         self.filters_frame = customtkinter.CTkFrame(self)
-        self.filters_frame.pack(side="left", fill="both", expand=True, padx=10, pady=10)
+        self.filters_frame.pack(side="left", fill="both", expand=False, padx=10, pady=10)
 
         for filter_id, filter in enumerate(self.filters):
             rb_filter = customtkinter.CTkRadioButton(

@@ -5,7 +5,6 @@ from typing import Any
 
 import customtkinter
 import cv2
-import numpy as np
 import numpy.typing as npt
 from PIL import Image
 

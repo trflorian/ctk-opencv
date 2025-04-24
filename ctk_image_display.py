@@ -124,7 +124,8 @@ class CTkImageDisplay(customtkinter.CTkLabel):
         """
         if frame.dtype != np.uint8:
             # scale the frame to uint8 if necessary
-            frame = cv2.normalize(frame, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
+            cv2.normalize(frame, frame, 0, 255, cv2.NORM_MINMAX)
+            frame = frame.astype(np.uint8)
 
         if len(frame.shape) == 2:
             # If the frame is grayscale, convert it to BGR

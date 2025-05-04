@@ -1,7 +1,7 @@
 # Modern GUI for Computer Vision with CustomTkinter
 
 ![Python](https://img.shields.io/badge/python-3.10-blue.svg)
-![GitHub License](https://img.shields.io/github/license/trflorian/ball-tracking-live-plot?style=flat)
+![GitHub License](https://img.shields.io/github/license/trflorian/ctk-opencv?style=flat)
 
 ![demo](https://github.com/user-attachments/assets/c8600663-3b1d-489d-a144-56179f811cc3)
 

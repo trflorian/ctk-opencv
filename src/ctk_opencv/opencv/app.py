@@ -5,8 +5,9 @@ from ctk_opencv.processing.utils import convert_any_to_bgr
 
 
 class App:
-    def __init__(self, filters: list[Filter]) -> None:
+    def __init__(self, filters: list[Filter], capture_device: int) -> None:
         self.filters = filters
+        self.capture_device = capture_device
 
         self.window_name = "Webcam Stream"
         cv2.namedWindow(self.window_name)
@@ -24,7 +25,7 @@ class App:
         """
         Start the webcam stream and display it using OpenCV.
         """
-        cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture(self.capture_device)
 
         while True:
             ret, frame = cap.read()

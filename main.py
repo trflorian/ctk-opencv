@@ -9,6 +9,12 @@ from ctk_opencv.processing.filter import FilterFactory
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Webcam Stream with Filters")
     parser.add_argument(
+        "--capture-device",
+        type=int,
+        default=0,
+        help="Choose the capture device (default is 0).",
+    )
+    parser.add_argument(
         "--gui",
         type=str,
         choices=["ctk", "opencv"],
@@ -26,10 +32,10 @@ def main() -> None:
     filters = FilterFactory.create_all_filters()
 
     if args.gui == "opencv":
-        app = AppOpenCV(filters)
+        app = AppOpenCV(filters, args.capture_device)
         app.start_webcam_stream()
     elif args.gui == "ctk":
-        app = AppCtk(filters)
+        app = AppCtk(filters, args.capture_device)
         app.mainloop()
 
 

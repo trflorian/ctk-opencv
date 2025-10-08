@@ -8,10 +8,11 @@ from ctk_opencv.processing.filter import Filter
 
 
 class App(customtkinter.CTk):
-    def __init__(self, filters: list[Filter]) -> None:
+    def __init__(self, filters: list[Filter], capture_device: int) -> None:
         super().__init__()
 
         self.filters = filters
+        self.capture_device = capture_device
 
         self.title("Webcam Stream")
         self.geometry("800x600")
@@ -47,7 +48,7 @@ class App(customtkinter.CTk):
         """
         Start the webcam stream and update the image display.
         """
-        cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture(self.capture_device)
 
         while True:
             ret, frame = cap.read()

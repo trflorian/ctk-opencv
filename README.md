@@ -28,15 +28,18 @@ uv run main.py
 ```
 
 You can specify the gui type with the `gui` argument if you want to compare opencv and the modern ctk look.
+To use a different capture device, use the `capture-device` argument and provide the device index (default is 0).
 
 ```
-usage: main.py [-h] [--gui {ctk,opencv}]
+usage: main.py [-h] [--capture-device CAPTURE_DEVICE] [--gui {ctk,opencv}]
 
 Webcam Stream with Filters
 
 options:
-  -h, --help          show this help message and exit
-  --gui {ctk,opencv}  Choose the GUI framework to use (ctk or opencv).
+  -h, --help            show this help message and exit
+  --capture-device CAPTURE_DEVICE
+                        Choose the capture device (default is 0).
+  --gui {ctk,opencv}    Choose the GUI framework to use (ctk or opencv).
 ```
 
 ## Tests
